@@ -12,7 +12,7 @@ public enum UpdateSeverity
     Major
 }
 
-public readonly record struct UpdateNotice(UpdateSeverity Severity, string Message);
+public readonly record struct UpdateNotice(UpdateSeverity Severity, string Message, string? ReleaseUrl);
 
 public static class UpdateChecker
 {
@@ -36,7 +36,11 @@ public static class UpdateChecker
             var tag = tagProp.GetString()?.TrimStart('v', 'V');
             if (string.IsNullOrEmpty(tag) || !Version.TryParse(tag, out var latest)) return null;
 
-            return Evaluate(currentVersion, latest);
+            var releaseUrl = doc.RootElement.TryGetProperty("html_url", out var urlProp)
+                ? urlProp.GetString()
+                : null;
+
+            return Evaluate(currentVersion, latest, releaseUrl);
         }
         catch
         {
@@ -44,20 +48,20 @@ public static class UpdateChecker
         }
     }
 
-    private static UpdateNotice? Evaluate(Version current, Version latest)
+    private static UpdateNotice? Evaluate(Version current, Version latest, string? releaseUrl)
     {
         if (latest.Major != current.Major)
             return latest.Major > current.Major
-                ? new UpdateNotice(UpdateSeverity.Major, "This version of the Uploader is outdated.  Please get the latest release.")
+                ? new UpdateNotice(UpdateSeverity.Major, "This version of the Uploader is outdated.  Please get the latest release.", releaseUrl)
                 : null;
 
         if (latest.Minor != current.Minor)
             return latest.Minor > current.Minor
-                ? new UpdateNotice(UpdateSeverity.Minor, "New updates are available for the Uploader")
+                ? new UpdateNotice(UpdateSeverity.Minor, "New updates are available for the Uploader", releaseUrl)
                 : null;
 
         if (latest.Build > current.Build)
-            return new UpdateNotice(UpdateSeverity.Build, "A new uploader build is available");
+            return new UpdateNotice(UpdateSeverity.Build, "A new uploader build is available", releaseUrl);
 
         return null;
     }

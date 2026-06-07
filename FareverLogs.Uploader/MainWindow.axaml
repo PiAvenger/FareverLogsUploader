@@ -33,9 +33,16 @@
                 Classes.BuildUpdate="{Binding IsBuildUpdate}"
                 Classes.MinorUpdate="{Binding IsMinorUpdate}"
                 Classes.MajorUpdate="{Binding IsMajorUpdate}">
-            <TextBlock Text="{Binding UpdateBannerMessage}"
-                       HorizontalAlignment="Center"
-                       FontSize="12" />
+            <Button Command="{Binding OpenReleasePageCommand}"
+                    HorizontalAlignment="Center"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Padding="0"
+                    Cursor="Hand">
+                <TextBlock Text="{Binding UpdateBannerMessage}"
+                           TextDecorations="Underline"
+                           FontSize="12" />
+            </Button>
         </Border>
 
         <ContentControl Grid.Row="1" Content="{Binding CurrentView}" />

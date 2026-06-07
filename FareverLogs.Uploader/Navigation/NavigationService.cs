@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FareverLogs.Uploader.Updates;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,7 +20,8 @@ public sealed partial class NavigationService : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsMajorUpdate))]
     private UpdateSeverity _updateSeverity;
 
-    [ObservableProperty] private string _updateBannerMessage = "";
+    [ObservableProperty] private string  _updateBannerMessage = "";
+    [ObservableProperty] private string? _updateReleaseUrl;
 
     public bool IsUpdateBannerVisible => UpdateSeverity != UpdateSeverity.None;
     public bool IsBuildUpdate         => UpdateSeverity == UpdateSeverity.Build;
@@ -31,6 +34,14 @@ public sealed partial class NavigationService : ObservableObject
     {
         UpdateBannerMessage = notice.Message;
         UpdateSeverity      = notice.Severity;
+        UpdateReleaseUrl    = notice.ReleaseUrl;
+    }
+
+    [RelayCommand]
+    private void OpenReleasePage()
+    {
+        if (string.IsNullOrEmpty(UpdateReleaseUrl)) return;
+        Process.Start(new ProcessStartInfo(UpdateReleaseUrl) { UseShellExecute = true });
     }
 
     public void NavigateTo<TViewModel>() where TViewModel : class
