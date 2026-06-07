@@ -42,23 +42,28 @@
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
-  <Target Name="IncrementVersion" BeforeTargets="Build">
+  <Target Name="SetVersion" BeforeTargets="Build">
     <ReadLinesFromFile File="$(MSBuildThisFileDirectory)version.txt">
       <Output TaskParameter="Lines" ItemName="_VersionLines" />
     </ReadLinesFromFile>
     <PropertyGroup>
-      <_CurrentVersion>@(_VersionLines)</_CurrentVersion>
-      <_VersionMajor>$([System.Version]::Parse('$(_CurrentVersion)').Major)</_VersionMajor>
-      <_VersionMinor>$([System.Version]::Parse('$(_CurrentVersion)').Minor)</_VersionMinor>
-      <_VersionPatch>$([System.Version]::Parse('$(_CurrentVersion)').Build)</_VersionPatch>
-      <_NewPatch>$([MSBuild]::Add($(_VersionPatch), 1))</_NewPatch>
-      <Version>$(_VersionMajor).$(_VersionMinor).$(_NewPatch)</Version>
+      <Version>@(_VersionLines)</Version>
       <AssemblyVersion>$(Version).0</AssemblyVersion>
       <FileVersion>$(Version).0</FileVersion>
       <InformationalVersion>$(Version)</InformationalVersion>
     </PropertyGroup>
-    <WriteLinesToFile File="$(MSBuildThisFileDirectory)version.txt" Lines="$(Version)" Overwrite="true" />
     <Message Text="FareverLogs.Uploader version: $(Version)" Importance="High" />
+  </Target>
+
+  <Target Name="IncrementVersion" AfterTargets="Build">
+    <PropertyGroup>
+      <_VersionMajor>$([System.Version]::Parse('$(Version)').Major)</_VersionMajor>
+      <_VersionMinor>$([System.Version]::Parse('$(Version)').Minor)</_VersionMinor>
+      <_VersionPatch>$([System.Version]::Parse('$(Version)').Build)</_VersionPatch>
+      <_NewPatch>$([MSBuild]::Add($(_VersionPatch), 1))</_NewPatch>
+      <_NextVersion>$(_VersionMajor).$(_VersionMinor).$(_NewPatch)</_NextVersion>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(MSBuildThisFileDirectory)version.txt" Lines="$(_NextVersion)" Overwrite="true" />
   </Target>
 
   <Target Name="CreateVersionedExe" AfterTargets="Publish">
