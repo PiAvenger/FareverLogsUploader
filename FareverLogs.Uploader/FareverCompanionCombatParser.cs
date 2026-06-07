@@ -100,6 +100,13 @@ public class FareverCompanionCombatParser
                 return;
             }
 
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                var errors = await response.Content.ReadFromJsonAsync<List<string>>();
+                Log($"Upload failed: {string.Join(", ", errors ?? ["Unauthorized"])}");
+                return;
+            }
+
             Log($"Upload failed ({(int)response.StatusCode}), queuing for retry.");
             _retryQueue.Enqueue(filePath);
             _nextRetryAt = DateTime.UtcNow.AddSeconds(30);
@@ -131,11 +138,24 @@ public class FareverCompanionCombatParser
                 content.Add(new StreamContent(stream), "file", Path.GetFileName(filePath));
 
                 var response = await _httpClient.PostAsync("api/report/upload/file", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var payload = await response.Content.ReadFromJsonAsync<UploadResponse>();
+                    var baseUrl = _httpClient.BaseAddress?.ToString().TrimEnd('/');
+                    var reportUrl = $"{baseUrl}/report/{payload?.Id}";
+                    _log($"Retry succeeded: {reportUrl}", reportUrl);
+                    continue;
+                }
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    var errors = await response.Content.ReadFromJsonAsync<List<string>>();
+                    Log($"Retry failed: {string.Join(", ", errors ?? ["Unauthorized"])}");
+                    continue;
+                }
+
                 response.EnsureSuccessStatusCode();
-                var payload = await response.Content.ReadFromJsonAsync<UploadResponse>();
-                var baseUrl = _httpClient.BaseAddress?.ToString().TrimEnd('/');
-                var reportUrl = $"{baseUrl}/report/{payload?.Id}";
-                _log($"Retry succeeded: {reportUrl}", reportUrl);
             }
             catch (Exception ex)
             {

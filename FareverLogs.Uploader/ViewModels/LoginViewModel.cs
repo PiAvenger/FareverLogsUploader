@@ -97,7 +97,7 @@ public sealed partial class LoginViewModel : ObservableObject
     private static async Task<string?> WaitForCallbackAsync(int port, CancellationToken ct)
     {
         var listener = new HttpListener();
-        listener.Prefixes.Add($"http://localhost:{port}/");
+        listener.Prefixes.Add($"http://127.0.0.1:{port}/");
         listener.Start();
         try
         {
