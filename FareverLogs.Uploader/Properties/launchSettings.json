@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Windows Machine": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    },
+    "Windows Machine (Native Debug)": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:FareverLogs.Uploader.ViewModels"
+             x:Class="FareverLogs.Uploader.Views.LoginView"
+             x:DataType="vm:LoginViewModel">
+
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
+                Spacing="20" MaxWidth="380">
+
+        <TextBlock Text="FareverLogs Uploader"
+                   Classes="Heading"
+                   FontSize="22"
+                   HorizontalAlignment="Center" />
+
+        <TextBlock Text="Connect your Discord account to upload logs and track your parses."
+                   Foreground="{StaticResource TextSecondary}"
+                   FontSize="13"
+                   TextWrapping="Wrap"
+                   TextAlignment="Center" />
+
+        <!-- Server picker -->
+        <StackPanel Spacing="6" IsVisible="{Binding IsServerPickerVisible}">
+            <TextBlock Text="Server" Foreground="{StaticResource TextMuted}" FontSize="11" />
+            <ComboBox ItemsSource="{Binding Urls}"
+                      SelectedItem="{Binding SelectedUrl}"
+                      HorizontalAlignment="Stretch"
+                      IsEnabled="{Binding !IsWaiting}" />
+        </StackPanel>
+
+        <!-- Login button -->
+        <Button Content="Log In with Discord"
+                Command="{Binding LoginCommand}"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                IsEnabled="{Binding !IsWaiting}" />
+
+        <!-- Waiting state -->
+        <StackPanel Spacing="10" IsVisible="{Binding IsWaiting}">
+            <ProgressBar IsIndeterminate="True" HorizontalAlignment="Stretch" />
+            <TextBlock Text="{Binding StatusText}"
+                       Foreground="{StaticResource TextMuted}"
+                       FontSize="12"
+                       TextAlignment="Center" />
+            <Button Content="Cancel"
+                    Command="{Binding CancelCommand}"
+                    Classes="Ghost"
+                    HorizontalAlignment="Center" />
+        </StackPanel>
+
+        <!-- Error text (not waiting) -->
+        <TextBlock Text="{Binding StatusText}"
+                   Foreground="{StaticResource Danger}"
+                   FontSize="12"
+                   TextAlignment="Center"
+                   IsVisible="{Binding !IsWaiting}" />
+
+    </StackPanel>
+</UserControl>

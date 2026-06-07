@@ -1,0 +1,126 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:conv="clr-namespace:FareverLogs.Uploader">
+
+    <Styles.Resources>
+        <ResourceDictionary>
+            <!-- Converters -->
+            <conv:InvertedBoolConverter   x:Key="InvertedBoolConverter" />
+            <conv:StringNotEmptyConverter x:Key="StringNotEmptyConverter" />
+
+            <!-- Brushes -->
+            <SolidColorBrush x:Key="Background"    Color="#0e0f13" />
+            <SolidColorBrush x:Key="Surface"       Color="#16171c" />
+            <SolidColorBrush x:Key="SurfaceAlt"    Color="#1e1f26" />
+            <SolidColorBrush x:Key="Accent"        Color="#38bdf8" />
+            <SolidColorBrush x:Key="AccentDark"    Color="#0284c7" />
+            <SolidColorBrush x:Key="TextPrimary"   Color="#e2e8f0" />
+            <SolidColorBrush x:Key="TextSecondary" Color="#94a3b8" />
+            <SolidColorBrush x:Key="TextMuted"     Color="#475569" />
+            <SolidColorBrush x:Key="Border"        Color="#2d2f3a" />
+            <SolidColorBrush x:Key="Danger"        Color="#ef4444" />
+            <SolidColorBrush x:Key="Success"       Color="#22c55e" />
+            <SolidColorBrush x:Key="Warning"       Color="#f59e0b" />
+        </ResourceDictionary>
+    </Styles.Resources>
+
+    <!-- Window background -->
+    <Style Selector="Window">
+        <Setter Property="Background" Value="{StaticResource Background}" />
+    </Style>
+
+    <!-- Default TextBlock -->
+    <Style Selector="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+        <Setter Property="FontSize"   Value="13" />
+    </Style>
+
+    <Style Selector="TextBlock.Heading">
+        <Setter Property="Foreground" Value="{StaticResource Accent}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize"   Value="15" />
+    </Style>
+
+    <Style Selector="TextBlock.Mono">
+        <Setter Property="FontFamily" Value="Courier New" />
+        <Setter Property="FontSize"   Value="11" />
+    </Style>
+
+    <Style Selector="TextBlock.MonoMuted">
+        <Setter Property="FontFamily" Value="Courier New" />
+        <Setter Property="FontSize"   Value="11" />
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+    </Style>
+
+    <!-- Default Button -->
+    <Style Selector="Button">
+        <Setter Property="Background"   Value="{StaticResource AccentDark}" />
+        <Setter Property="Foreground"   Value="{StaticResource TextPrimary}" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Padding"      Value="12,6" />
+        <Setter Property="FontSize"     Value="13" />
+        <Setter Property="Cursor"       Value="Hand" />
+    </Style>
+    <Style Selector="Button:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource Accent}" />
+    </Style>
+
+    <!-- Ghost button -->
+    <Style Selector="Button.Ghost">
+        <Setter Property="Background"      Value="Transparent" />
+        <Setter Property="BorderBrush"     Value="{StaticResource Border}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground"      Value="{StaticResource TextMuted}" />
+        <Setter Property="CornerRadius"    Value="0" />
+        <Setter Property="FontSize"        Value="12" />
+        <Setter Property="Padding"         Value="10,5" />
+    </Style>
+    <Style Selector="Button.Ghost:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <!-- Link button (clickable URLs in log) -->
+    <Style Selector="Button.Link">
+        <Setter Property="Background"      Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground"      Value="{StaticResource Accent}" />
+        <Setter Property="Padding"         Value="0,1" />
+        <Setter Property="FontFamily"      Value="Courier New" />
+        <Setter Property="FontSize"        Value="11" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="Cursor"          Value="Hand" />
+    </Style>
+    <Style Selector="Button.Link /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="Button.Link:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <!-- Border panel -->
+    <Style Selector="Border.Panel">
+        <Setter Property="Background"      Value="{StaticResource Surface}" />
+        <Setter Property="BorderBrush"     Value="{StaticResource Border}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding"         Value="8" />
+    </Style>
+
+    <!-- ComboBox -->
+    <Style Selector="ComboBox">
+        <Setter Property="Background" Value="{StaticResource SurfaceAlt}" />
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+    </Style>
+
+    <!-- CheckBox -->
+    <Style Selector="CheckBox">
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+    </Style>
+
+    <!-- ProgressBar -->
+    <Style Selector="ProgressBar">
+        <Setter Property="Foreground" Value="{StaticResource Accent}" />
+        <Setter Property="Background" Value="{StaticResource Surface}" />
+        <Setter Property="Height"     Value="4" />
+    </Style>
+
+</Styles>

@@ -1,0 +1,30 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:nav="clr-namespace:FareverLogs.Uploader.Navigation"
+        xmlns:vm="clr-namespace:FareverLogs.Uploader.ViewModels"
+        xmlns:views="clr-namespace:FareverLogs.Uploader.Views"
+        x:Class="FareverLogs.Uploader.MainWindow"
+        x:DataType="nav:NavigationService"
+        Title="FareverLogs Uploader"
+        Width="900" Height="650"
+        Background="{StaticResource Background}"
+        CanResize="True">
+
+    <Window.DataTemplates>
+        <DataTemplate DataType="{x:Type vm:LoginViewModel}">
+            <views:LoginView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+            <views:HomeView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:LiveLogViewModel}">
+            <views:LiveLogView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:UploadExistingViewModel}">
+            <views:UploadExistingView />
+        </DataTemplate>
+    </Window.DataTemplates>
+
+    <ContentControl Content="{Binding CurrentView}" />
+
+</Window>

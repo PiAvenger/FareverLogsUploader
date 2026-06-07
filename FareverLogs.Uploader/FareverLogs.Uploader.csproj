@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>FareverLogs.Uploader</RootNamespace>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <NoWarn>$(NoWarn);MVVMTK0045</NoWarn>
+    <ApplicationTitle>FareverLogs Uploader</ApplicationTitle>
+    <!-- Single-file publish -->
+    <PublishTrimmed>false</PublishTrimmed>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Include="Resources\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.2.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.2.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
+  <Target Name="IncrementVersion" BeforeTargets="Build">
+    <ReadLinesFromFile File="$(MSBuildThisFileDirectory)version.txt">
+      <Output TaskParameter="Lines" ItemName="_VersionLines" />
+    </ReadLinesFromFile>
+    <PropertyGroup>
+      <_CurrentVersion>@(_VersionLines)</_CurrentVersion>
+      <_VersionMajor>$([System.Version]::Parse('$(_CurrentVersion)').Major)</_VersionMajor>
+      <_VersionMinor>$([System.Version]::Parse('$(_CurrentVersion)').Minor)</_VersionMinor>
+      <_VersionPatch>$([System.Version]::Parse('$(_CurrentVersion)').Build)</_VersionPatch>
+      <_NewPatch>$([MSBuild]::Add($(_VersionPatch), 1))</_NewPatch>
+      <Version>$(_VersionMajor).$(_VersionMinor).$(_NewPatch)</Version>
+      <AssemblyVersion>$(Version).0</AssemblyVersion>
+      <FileVersion>$(Version).0</FileVersion>
+      <InformationalVersion>$(Version)</InformationalVersion>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(MSBuildThisFileDirectory)version.txt" Lines="$(Version)" Overwrite="true" />
+    <Message Text="FareverLogs.Uploader version: $(Version)" Importance="High" />
+  </Target>
+
+  <Target Name="CreateVersionedExe" AfterTargets="Publish">
+    <Copy SourceFiles="$(PublishDir)FareverLogs.Uploader.exe"
+          DestinationFiles="$(PublishDir)..\FareverLogs.Uploader-$(Version).exe" />
+    <Message Text="Published: FareverLogs.Uploader-$(Version).exe" Importance="High" />
+  </Target>
+
+</Project>

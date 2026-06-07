@@ -1,0 +1,117 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:FareverLogs.Uploader.ViewModels"
+             x:Class="FareverLogs.Uploader.Views.UploadExistingView"
+             x:DataType="vm:UploadExistingViewModel">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="24">
+
+        <!-- Header row -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto,Auto">
+            <Button Grid.Column="0"
+                    Content="← Back"
+                    Command="{Binding BackCommand}"
+                    Classes="Ghost" />
+            <TextBlock Grid.Column="1"
+                       Text="Upload Existing Logs"
+                       Classes="Heading"
+                       FontSize="16"
+                       VerticalAlignment="Center"
+                       Margin="12,0,0,0" />
+            <Button Grid.Column="2"
+                    Content="Refresh"
+                    Classes="Ghost"
+                    Click="OnRefreshClicked" />
+            <Button Grid.Column="3"
+                    Content="Select All"
+                    Command="{Binding SelectAllCommand}"
+                    Classes="Ghost" />
+            <Button Grid.Column="4"
+                    Content="Clear"
+                    Command="{Binding ClearSelectionCommand}"
+                    Classes="Ghost" />
+        </Grid>
+
+        <!-- Status text -->
+        <TextBlock Grid.Row="1" Margin="0,8,0,0"
+                   Text="{Binding StatusText}"
+                   Foreground="{StaticResource TextMuted}"
+                   FontSize="12"
+                   IsVisible="{Binding StatusText,
+                       Converter={StaticResource StringNotEmptyConverter}}" />
+
+        <!-- File list (left) + Results log (right) -->
+        <Grid Grid.Row="2" Margin="0,8,0,0" ColumnDefinitions="*,16,*">
+
+            <!-- File list -->
+            <Border Grid.Column="0" Classes="Panel" Padding="4">
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding Files}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:FileItem">
+                                <Grid ColumnDefinitions="Auto,8,*,8,Auto"
+                                      Margin="4,4">
+                                    <CheckBox Grid.Column="0"
+                                              IsChecked="{Binding IsSelected}"
+                                              VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding FileName}"
+                                               Classes="Mono"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Grid.Column="4"
+                                               Text="{Binding DisplayDate}"
+                                               Foreground="{StaticResource TextMuted}"
+                                               FontSize="10"
+                                               VerticalAlignment="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+
+            <!-- Results log -->
+            <Border Grid.Column="2" Classes="Panel" Padding="4">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Upload Results"
+                               Classes="Heading"
+                               FontSize="12"
+                               Margin="4,4,4,6" />
+                    <ListBox x:Name="ResultsBox"
+                             ItemsSource="{Binding Results}"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:LogEntry">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Text}"
+                                               Classes="MonoMuted"
+                                               TextWrapping="Wrap" />
+                                    <Button Content="{Binding Url}"
+                                            IsVisible="{Binding HasUrl}"
+                                            Classes="Link"
+                                            Click="OnUrlClick"
+                                            Tag="{Binding Url}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+        </Grid>
+
+        <!-- Upload button -->
+        <Button Grid.Row="3"
+                Margin="0,8,0,0"
+                Content="Upload Selected"
+                Command="{Binding UploadCommand}"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                IsEnabled="{Binding !IsUploading}" />
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:FareverLogs.Uploader.ViewModels"
+             x:Class="FareverLogs.Uploader.Views.HomeView"
+             x:DataType="vm:HomeViewModel">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="32">
+
+        <!-- Farever Folder -->
+        <StackPanel Grid.Row="0" Spacing="6" Margin="0,0,0,28">
+            <TextBlock Text="Farever Folder" Foreground="{StaticResource TextMuted}" FontSize="11" />
+            <Grid ColumnDefinitions="*,8,Auto">
+                <TextBox Grid.Column="0"
+                         Text="{Binding FareverFolder}"
+                         Watermark="Path to Farever game folder" />
+                <Button Grid.Column="2"
+                        Content="Browse"
+                        Click="OnBrowseFolderClicked" />
+            </Grid>
+            <TextBlock Text="{Binding FolderError}"
+                       Foreground="{StaticResource Danger}"
+                       FontSize="12"
+                       IsVisible="{Binding HasFolderError}" />
+        </StackPanel>
+
+        <!-- Welcome header -->
+        <StackPanel Grid.Row="1" Spacing="6" Margin="0,0,0,40">
+            <TextBlock Text="Welcome back,"
+                       Foreground="{StaticResource TextMuted}"
+                       FontSize="14" />
+            <TextBlock Text="{Binding Username}"
+                       Classes="Heading"
+                       FontSize="26" />
+        </StackPanel>
+
+        <!-- Mode tiles -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,24,*" VerticalAlignment="Center">
+
+            <!-- Live Log tile -->
+            <Border Grid.Column="0" Classes="Panel" Padding="28">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="Live Log" Classes="Heading" FontSize="17" />
+                    <TextBlock TextWrapping="Wrap"
+                               Foreground="{StaticResource TextSecondary}"
+                               FontSize="13">
+                        Watch your combat-logs folder in real time and automatically upload new encounters as they complete.
+                    </TextBlock>
+                    <Button Content="Start Live Logging"
+                            Command="{Binding GoToLiveLogCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            Margin="0,8,0,0" />
+                </StackPanel>
+            </Border>
+
+            <!-- Upload Existing tile -->
+            <Border Grid.Column="2" Classes="Panel" Padding="28">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="Upload Existing Logs" Classes="Heading" FontSize="17" />
+                    <TextBlock TextWrapping="Wrap"
+                               Foreground="{StaticResource TextSecondary}"
+                               FontSize="13">
+                        Browse previously recorded log files and upload one or more to generate reports.
+                    </TextBlock>
+                    <Button Content="Browse Log Files"
+                            Command="{Binding GoToUploadExistingCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            Margin="0,8,0,0" />
+                </StackPanel>
+            </Border>
+
+        </Grid>
+
+        <!-- Logout -->
+        <StackPanel Grid.Row="3" HorizontalAlignment="Right">
+            <Button Content="Log Out"
+                    Command="{Binding LogoutCommand}"
+                    Classes="Ghost" />
+        </StackPanel>
+
+    </Grid>
+</UserControl>
