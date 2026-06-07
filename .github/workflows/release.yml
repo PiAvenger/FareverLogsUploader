@@ -24,7 +24,7 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore
-        run: dotnet restore FareverLogs.Uploader.sln
+        run: dotnet restore FareverLogs.Uploader.slnx
 
       - name: Publish
         run: >
