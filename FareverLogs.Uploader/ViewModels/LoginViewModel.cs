@@ -13,10 +13,10 @@ public sealed partial class LoginViewModel : ObservableObject
 {
 #if DEBUG
     public bool IsServerPickerVisible => true;
-    public List<string> Urls { get; } = ["https://fareverlogs.fly.dev/", "https://localhost:50385/"];
+    public List<string> Urls { get; } = ["https://fareverlogs.com/", "https://localhost:50385/"];
 #else
     public bool IsServerPickerVisible => false;
-    public List<string> Urls { get; } = ["https://fareverlogs.fly.dev/"];
+    public List<string> Urls { get; } = ["https://fareverlogs.com/"];
 #endif
 
     [ObservableProperty] private string _selectedUrl;
@@ -36,9 +36,9 @@ public sealed partial class LoginViewModel : ObservableObject
 #if DEBUG
         _selectedUrl = !string.IsNullOrEmpty(config.ServerUrl)
             ? config.ServerUrl
-            : "https://fareverlogs.fly.dev/";
+            : "https://fareverlogs.com/";
 #else
-        _selectedUrl = "https://fareverlogs.fly.dev/";
+        _selectedUrl = "https://fareverlogs.com/";
 #endif
     }
 

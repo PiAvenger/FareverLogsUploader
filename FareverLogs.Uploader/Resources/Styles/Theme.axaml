@@ -97,6 +97,28 @@
         <Setter Property="Background" Value="Transparent" />
     </Style>
 
+    <!-- Update banner -->
+    <Style Selector="Border.BuildUpdate">
+        <Setter Property="Background" Value="White" />
+    </Style>
+    <Style Selector="Border.BuildUpdate TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource Background}" />
+    </Style>
+
+    <Style Selector="Border.MinorUpdate">
+        <Setter Property="Background" Value="{StaticResource Warning}" />
+    </Style>
+    <Style Selector="Border.MinorUpdate TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource Background}" />
+    </Style>
+
+    <Style Selector="Border.MajorUpdate">
+        <Setter Property="Background" Value="{StaticResource Danger}" />
+    </Style>
+    <Style Selector="Border.MajorUpdate TextBlock">
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
     <!-- Border panel -->
     <Style Selector="Border.Panel">
         <Setter Property="Background"      Value="{StaticResource Surface}" />

@@ -42,7 +42,7 @@
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
-  <Target Name="SetVersion" BeforeTargets="Build">
+  <Target Name="SetVersion" BeforeTargets="BeforeBuild;GetAssemblyVersion;CoreGenerateAssemblyInfo">
     <ReadLinesFromFile File="$(MSBuildThisFileDirectory)version.txt">
       <Output TaskParameter="Lines" ItemName="_VersionLines" />
     </ReadLinesFromFile>

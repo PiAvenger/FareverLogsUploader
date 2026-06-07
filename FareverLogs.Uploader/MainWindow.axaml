@@ -25,6 +25,21 @@
         </DataTemplate>
     </Window.DataTemplates>
 
-    <ContentControl Content="{Binding CurrentView}" />
+    <Grid RowDefinitions="Auto,*">
+
+        <Border Grid.Row="0"
+                Padding="0,6"
+                IsVisible="{Binding IsUpdateBannerVisible}"
+                Classes.BuildUpdate="{Binding IsBuildUpdate}"
+                Classes.MinorUpdate="{Binding IsMinorUpdate}"
+                Classes.MajorUpdate="{Binding IsMajorUpdate}">
+            <TextBlock Text="{Binding UpdateBannerMessage}"
+                       HorizontalAlignment="Center"
+                       FontSize="12" />
+        </Border>
+
+        <ContentControl Grid.Row="1" Content="{Binding CurrentView}" />
+
+    </Grid>
 
 </Window>
