@@ -15,6 +15,14 @@ public sealed partial class LiveLogViewModel : ObservableObject
     public string StartButtonLabel => IsRunning ? "Stop Live Logging" : "Start Live Logging";
     partial void OnIsRunningChanged(bool value) => OnPropertyChanged(nameof(StartButtonLabel));
 
+#if DEBUG
+    public bool   IsServerVisible => true;
+#else
+    public bool   IsServerVisible => false;
+#endif
+
+    public string ServerUrl => _config.ServerUrl;
+
     public ObservableCollection<LogEntry> LogMessages { get; } = [];
 
     private CancellationTokenSource?  _cts;
