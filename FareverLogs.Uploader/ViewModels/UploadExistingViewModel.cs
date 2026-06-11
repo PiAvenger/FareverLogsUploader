@@ -47,6 +47,7 @@ public sealed partial class UploadExistingViewModel : ObservableObject
         }
 
         foreach (var f in Directory.EnumerateFiles(dir, "*.json")
+                     .Concat(Directory.EnumerateFiles(dir, "*.json.gz"))
                      .OrderByDescending(File.GetLastWriteTime))
         {
             Files.Add(new FileItem

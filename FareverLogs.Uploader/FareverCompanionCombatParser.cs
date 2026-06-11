@@ -53,6 +53,7 @@ public class FareverCompanionCombatParser
 
         var newFiles = Directory
             .EnumerateFiles(directory, "*.json")
+            .Concat(Directory.EnumerateFiles(directory, "*.json.gz"))
             .Where(f => File.GetCreationTimeUtc(f) > _lastScanTime)
             .OrderBy(File.GetCreationTimeUtc)
             .ToList();
