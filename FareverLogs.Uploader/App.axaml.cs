@@ -62,6 +62,7 @@ public partial class App : Application
         sc.AddSingleton<HomeViewModel>();
         sc.AddSingleton<LiveLogViewModel>();
         sc.AddSingleton<UploadExistingViewModel>();
+        sc.AddSingleton<SettingsViewModel>();
 
         sc.AddSingleton<MainWindow>();
     }

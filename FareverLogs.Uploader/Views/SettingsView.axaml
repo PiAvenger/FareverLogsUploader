@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:FareverLogs.Uploader.ViewModels"
+             x:Class="FareverLogs.Uploader.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+
+    <StackPanel Margin="0,16,0,0" Spacing="28">
+
+        <!-- Farever Folder -->
+        <StackPanel Spacing="6">
+            <TextBlock Text="Farever Folder" Classes="Heading" />
+            <Grid ColumnDefinitions="*,8,Auto">
+                <TextBox Grid.Column="0"
+                         Text="{Binding FareverFolder}"
+                         Watermark="Path to Farever game folder" />
+                <Button Grid.Column="2"
+                        Content="Browse"
+                        Click="OnBrowseFolderClicked" />
+            </Grid>
+            <TextBlock Text="{Binding FolderError}"
+                       Foreground="{StaticResource Danger}"
+                       FontSize="12"
+                       IsVisible="{Binding HasFolderError}" />
+        </StackPanel>
+
+        <!-- Server (debug only) -->
+        <StackPanel Spacing="6" IsVisible="{Binding IsServerVisible}">
+            <TextBlock Text="Server" Classes="Heading" />
+            <TextBlock Text="{Binding ServerUrl}"
+                       Foreground="{StaticResource TextSecondary}"
+                       FontSize="13" />
+        </StackPanel>
+
+        <!-- Account -->
+        <StackPanel Spacing="6">
+            <TextBlock Text="Account" Classes="Heading" />
+            <TextBlock Text="{Binding Username}"
+                       Foreground="{StaticResource TextSecondary}"
+                       FontSize="13" />
+            <Button Content="Log Out"
+                    Command="{Binding LogoutCommand}"
+                    Classes="Ghost"
+                    HorizontalAlignment="Left"
+                    Margin="0,8,0,0" />
+        </StackPanel>
+
+    </StackPanel>
+</UserControl>

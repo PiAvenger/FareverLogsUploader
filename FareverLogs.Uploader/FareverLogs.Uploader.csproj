@@ -10,6 +10,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <NoWarn>$(NoWarn);MVVMTK0045</NoWarn>
     <ApplicationTitle>FareverLogs Uploader</ApplicationTitle>
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
     <!-- Single-file publish -->
     <PublishTrimmed>false</PublishTrimmed>
     <SelfContained>true</SelfContained>

@@ -4,7 +4,6 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FareverLogs.Uploader.Config;
-using FareverLogs.Uploader.Navigation;
 
 namespace FareverLogs.Uploader.ViewModels;
 
@@ -24,13 +23,11 @@ public sealed partial class UploadExistingViewModel : ObservableObject
     [ObservableProperty] private bool   _isUploading;
     [ObservableProperty] private string _statusText = "";
 
-    private readonly AppConfig         _config;
-    private readonly NavigationService _nav;
+    private readonly AppConfig _config;
 
-    public UploadExistingViewModel(AppConfig config, NavigationService nav)
+    public UploadExistingViewModel(AppConfig config)
     {
         _config = config;
-        _nav    = nav;
     }
 
     public void ScanFiles()
@@ -100,9 +97,6 @@ public sealed partial class UploadExistingViewModel : ObservableObject
         IsUploading = false;
         StatusText  = $"Done — {selected.Count} file(s) processed.";
     }
-
-    [RelayCommand]
-    private void Back() => _nav.GoBack();
 
     private void Log(string text, string? url = null) =>
         Dispatcher.UIThread.Post(() =>

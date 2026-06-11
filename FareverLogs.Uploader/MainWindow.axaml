@@ -5,6 +5,7 @@
         xmlns:views="clr-namespace:FareverLogs.Uploader.Views"
         x:Class="FareverLogs.Uploader.MainWindow"
         x:DataType="nav:NavigationService"
+        Icon="/Assets/icon.ico"
         Title="FareverLogs Uploader"
         Width="900" Height="650"
         Background="{StaticResource Background}"
@@ -16,12 +17,6 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:HomeViewModel}">
             <views:HomeView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:LiveLogViewModel}">
-            <views:LiveLogView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:UploadExistingViewModel}">
-            <views:UploadExistingView />
         </DataTemplate>
     </Window.DataTemplates>
 

@@ -4,41 +4,17 @@
              x:Class="FareverLogs.Uploader.Views.LiveLogView"
              x:DataType="vm:LiveLogViewModel">
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*" Margin="24">
-
-        <!-- Header: back + title -->
-        <Grid Grid.Row="0" ColumnDefinitions="Auto,*">
-            <Button Grid.Column="0"
-                    Content="← Back"
-                    Command="{Binding BackCommand}"
-                    Classes="Ghost" />
-            <TextBlock Grid.Column="1"
-                       Text="Live Log"
-                       Classes="Heading"
-                       FontSize="16"
-                       VerticalAlignment="Center"
-                       Margin="12,0,0,0" />
-        </Grid>
-
-        <!-- Server URL (read-only, debug only) -->
-        <StackPanel Grid.Row="1" Spacing="4" Margin="0,12,0,0"
-                    IsVisible="{Binding IsServerVisible}">
-            <TextBlock Text="Server" Classes="Heading" />
-            <TextBlock Text="{Binding ServerUrl}"
-                       Foreground="{StaticResource TextSecondary}"
-                       FontSize="13" />
-        </StackPanel>
+    <Grid RowDefinitions="Auto,*" Margin="0,16,0,0">
 
         <!-- Start / Stop -->
-        <Button Grid.Row="2"
-                Margin="0,12,0,0"
+        <Button Grid.Row="0"
                 Content="{Binding StartButtonLabel}"
                 Command="{Binding ToggleCommand}"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center" />
 
         <!-- Log output -->
-        <Border Grid.Row="3" Classes="Panel" Padding="4" Margin="0,12,0,0">
+        <Border Grid.Row="1" Classes="Panel" Padding="4" Margin="0,12,0,0">
             <ListBox x:Name="LogBox"
                      ItemsSource="{Binding LogMessages}"
                      Background="Transparent"

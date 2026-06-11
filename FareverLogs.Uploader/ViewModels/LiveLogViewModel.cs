@@ -4,7 +4,6 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FareverLogs.Uploader.Config;
-using FareverLogs.Uploader.Navigation;
 
 namespace FareverLogs.Uploader.ViewModels;
 
@@ -15,24 +14,14 @@ public sealed partial class LiveLogViewModel : ObservableObject
     public string StartButtonLabel => IsRunning ? "Stop Live Logging" : "Start Live Logging";
     partial void OnIsRunningChanged(bool value) => OnPropertyChanged(nameof(StartButtonLabel));
 
-#if DEBUG
-    public bool   IsServerVisible => true;
-#else
-    public bool   IsServerVisible => false;
-#endif
-
-    public string ServerUrl => _config.ServerUrl;
-
     public ObservableCollection<LogEntry> LogMessages { get; } = [];
 
-    private CancellationTokenSource?  _cts;
-    private readonly AppConfig         _config;
-    private readonly NavigationService _nav;
+    private CancellationTokenSource? _cts;
+    private readonly AppConfig       _config;
 
-    public LiveLogViewModel(AppConfig config, NavigationService nav)
+    public LiveLogViewModel(AppConfig config)
     {
         _config = config;
-        _nav    = nav;
     }
 
     [RelayCommand]
@@ -40,12 +29,18 @@ public sealed partial class LiveLogViewModel : ObservableObject
     {
         if (IsRunning) { _cts?.Cancel(); return; }
 
+        var logDir = _config.FareverFolder;
+        if (!Directory.Exists(logDir))
+        {
+            Log("Farever folder not found. Please set a valid path in Settings.");
+            return;
+        }
+
         IsRunning = true;
         _cts      = new CancellationTokenSource();
         var url   = _config.ServerUrl.TrimEnd('/') + "/";
         var token = _cts.Token;
 
-        var logDir = _config.FareverFolder;
         Log($"Watching {logDir}");
         Log($"Uploading to {url}");
 
@@ -78,9 +73,6 @@ public sealed partial class LiveLogViewModel : ObservableObject
             }
         }, token);
     }
-
-    [RelayCommand]
-    private void Back() => _nav.GoBack();
 
     private void Log(string message, string? url = null)
     {
