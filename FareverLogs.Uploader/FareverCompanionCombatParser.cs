@@ -6,14 +6,13 @@ public class FareverCompanionCombatParser
 {
     public record UploadResult(bool Success, string? ReportUrl, string? ErrorMessage);
 
+    private const string UploadEndpoint = "api/report/upload/file";
+
     public static async Task<UploadResult> UploadFileOnceAsync(HttpClient httpClient, string filePath)
     {
         try
         {
-            await using var stream = File.OpenRead(filePath);
-            using var content = new MultipartFormDataContent();
-            content.Add(new StreamContent(stream), "file", Path.GetFileName(filePath));
-            var response = await httpClient.PostAsync("api/report/upload/file", content);
+            using var response = await PostFileAsync(httpClient, filePath, null);
             if (response.IsSuccessStatusCode)
             {
                 var payload = await response.Content.ReadFromJsonAsync<UploadResponse>();
@@ -79,11 +78,7 @@ public class FareverCompanionCombatParser
     {
         try
         {
-            await using var stream = File.OpenRead(filePath);
-            using var content = new MultipartFormDataContent();
-            content.Add(new StreamContent(stream), "file", Path.GetFileName(filePath));
-
-            var response = await _httpClient.PostAsync("api/report/upload/file", content);
+            using var response = await PostFileAsync(_httpClient, filePath, Log);
 
             if (response.IsSuccessStatusCode)
             {
@@ -122,6 +117,41 @@ public class FareverCompanionCombatParser
 
     private record UploadResponse(string Id);
 
+    // Posts the file, transparently honouring a 429 by waiting the number of
+    // seconds the server asks for and trying again.
+    private static async Task<HttpResponseMessage> PostFileAsync(
+        HttpClient httpClient, string filePath, Action<string>? log)
+    {
+        while (true)
+        {
+            await using var stream = File.OpenRead(filePath);
+            using var content = new MultipartFormDataContent();
+            content.Add(new StreamContent(stream), "file", Path.GetFileName(filePath));
+
+            var response = await httpClient.PostAsync(UploadEndpoint, content);
+            if (response.StatusCode != System.Net.HttpStatusCode.TooManyRequests)
+                return response;
+
+            var retrySeconds = GetRetrySeconds(response);
+            response.Dispose();
+            log?.Invoke($"Rate limited (429), waiting {retrySeconds}s before retrying...");
+            await Task.Delay(TimeSpan.FromSeconds(retrySeconds));
+        }
+    }
+
+    private static int GetRetrySeconds(HttpResponseMessage response)
+    {
+        var retryAfter = response.Headers.RetryAfter;
+
+        if (retryAfter?.Delta is { } delta)
+            return Math.Max(1, (int)Math.Ceiling(delta.TotalSeconds));
+
+        if (retryAfter?.Date is { } date)
+            return Math.Max(1, (int)Math.Ceiling((date - DateTimeOffset.UtcNow).TotalSeconds));
+
+        return 30;
+    }
+
     private async Task RetryQueuedAsync()
     {
         if (_retryQueue.Count == 0 || DateTime.UtcNow < _nextRetryAt)
@@ -134,11 +164,7 @@ public class FareverCompanionCombatParser
             var filePath = _retryQueue.Dequeue();
             try
             {
-                await using var stream = File.OpenRead(filePath);
-                using var content = new MultipartFormDataContent();
-                content.Add(new StreamContent(stream), "file", Path.GetFileName(filePath));
-
-                var response = await _httpClient.PostAsync("api/report/upload/file", content);
+                using var response = await PostFileAsync(_httpClient, filePath, Log);
 
                 if (response.IsSuccessStatusCode)
                 {
