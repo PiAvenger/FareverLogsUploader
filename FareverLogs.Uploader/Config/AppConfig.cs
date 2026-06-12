@@ -17,6 +17,12 @@ public sealed class AppConfig
     public string JwtToken        { get; set; } = "";
     public string DiscordUsername { get; set; } = "";
 
+    // -- log maintenance (run on startup)
+    public bool ArchiveOldLogs       { get; set; } = false;
+    public int  ArchiveOlderThanDays { get; set; } = 7;
+    public bool DeleteOldLogs        { get; set; } = false;
+    public int  DeleteOlderThanDays  { get; set; } = 30;
+
     // -- persistence
 
     private static readonly string ConfigDir =

@@ -23,6 +23,33 @@
                        IsVisible="{Binding HasFolderError}" />
         </StackPanel>
 
+        <!-- Log Maintenance -->
+        <StackPanel Spacing="10">
+            <TextBlock Text="Log Maintenance" Classes="Heading" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <CheckBox Content="Archive logs older than"
+                          IsChecked="{Binding ArchiveOldLogs}"
+                          VerticalAlignment="Center" />
+                <TextBox Text="{Binding ArchiveOlderThanDays}"
+                         Width="56"
+                         VerticalAlignment="Center" />
+                <TextBlock Text="days"
+                           Foreground="{StaticResource TextSecondary}"
+                           VerticalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <CheckBox Content="Delete logs older than"
+                          IsChecked="{Binding DeleteOldLogs}"
+                          VerticalAlignment="Center" />
+                <TextBox Text="{Binding DeleteOlderThanDays}"
+                         Width="56"
+                         VerticalAlignment="Center" />
+                <TextBlock Text="days"
+                           Foreground="{StaticResource TextSecondary}"
+                           VerticalAlignment="Center" />
+            </StackPanel>
+        </StackPanel>
+
         <!-- Server (debug only) -->
         <StackPanel Spacing="6" IsVisible="{Binding IsServerVisible}">
             <TextBlock Text="Server" Classes="Heading" />

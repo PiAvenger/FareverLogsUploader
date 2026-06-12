@@ -29,6 +29,8 @@ public partial class App : Application
             var nav    = Services.GetRequiredService<NavigationService>();
             var config = Services.GetRequiredService<AppConfig>();
 
+            LogMaintenance.Run(config);
+
             if (string.IsNullOrEmpty(config.JwtToken))
                 nav.NavigateTo<LoginViewModel>();
             else

@@ -16,6 +16,11 @@ public sealed partial class SettingsViewModel : ObservableObject
     [ObservableProperty] private string _fareverFolder;
     [ObservableProperty] private string _folderError = "";
 
+    [ObservableProperty] private bool _archiveOldLogs;
+    [ObservableProperty] private int  _archiveOlderThanDays;
+    [ObservableProperty] private bool _deleteOldLogs;
+    [ObservableProperty] private int  _deleteOlderThanDays;
+
     public bool HasFolderError => !string.IsNullOrEmpty(_folderError);
 
 #if DEBUG
@@ -34,6 +39,11 @@ public sealed partial class SettingsViewModel : ObservableObject
     {
         _config = config;
         _nav    = nav;
+
+        _archiveOldLogs       = config.ArchiveOldLogs;
+        _archiveOlderThanDays = config.ArchiveOlderThanDays;
+        _deleteOldLogs        = config.DeleteOldLogs;
+        _deleteOlderThanDays  = config.DeleteOlderThanDays;
 
         if (!string.IsNullOrEmpty(config.FareverFolder))
         {
@@ -63,6 +73,30 @@ public sealed partial class SettingsViewModel : ObservableObject
 
     partial void OnFolderErrorChanged(string value) =>
         OnPropertyChanged(nameof(HasFolderError));
+
+    partial void OnArchiveOldLogsChanged(bool value)
+    {
+        _config.ArchiveOldLogs = value;
+        _config.Save();
+    }
+
+    partial void OnArchiveOlderThanDaysChanged(int value)
+    {
+        _config.ArchiveOlderThanDays = value;
+        _config.Save();
+    }
+
+    partial void OnDeleteOldLogsChanged(bool value)
+    {
+        _config.DeleteOldLogs = value;
+        _config.Save();
+    }
+
+    partial void OnDeleteOlderThanDaysChanged(int value)
+    {
+        _config.DeleteOlderThanDays = value;
+        _config.Save();
+    }
 
     [RelayCommand]
     private void Logout()

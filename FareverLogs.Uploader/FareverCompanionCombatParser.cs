@@ -175,6 +175,13 @@ public class FareverCompanionCombatParser
                     continue;
                 }
 
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    var errors = await response.Content.ReadFromJsonAsync<List<string>>();
+                    Log($"Upload rejected: {string.Join(", ", errors ?? [])}");
+                    return;
+                }
+
                 if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
                     var errors = await response.Content.ReadFromJsonAsync<List<string>>();
