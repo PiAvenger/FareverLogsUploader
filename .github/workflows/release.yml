@@ -39,13 +39,14 @@ jobs:
         shell: pwsh
         run: |
           $exe = Get-ChildItem -Path FareverLogs.Uploader -Recurse -Filter 'FareverLogs.Uploader-*.exe' |
+            Where-Object { $_.DirectoryName -match '[\\/]publish$' } |
             Sort-Object LastWriteTime -Descending |
             Select-Object -First 1
           if (-not $exe) {
-            throw "Could not locate published FareverLogs.Uploader-*.exe"
+            throw "Could not locate published FareverLogs.Uploader-*.exe in a publish folder"
           }
           $dir = $exe.DirectoryName
-          # Zip the entire publish folder (exe + dlls + native libs) into a single archive
+          # Zip only the contents of the publish folder (exe + dlls + native libs) into a single archive
           $zipName = [System.IO.Path]::GetFileNameWithoutExtension($exe.Name) + '.zip'
           $zipPath = Join-Path (Get-Location) $zipName
           Compress-Archive -Path (Join-Path $dir '*') -DestinationPath $zipPath -Force
