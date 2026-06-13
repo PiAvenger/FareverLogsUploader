@@ -34,7 +34,7 @@ jobs:
           --self-contained true
           -p:PublishSingleFile=true
 
-      - name: Locate published exe
+      - name: Locate published output
         id: locate
         shell: pwsh
         run: |
@@ -44,8 +44,16 @@ jobs:
           if (-not $exe) {
             throw "Could not locate published FareverLogs.Uploader-*.exe"
           }
+          $dir = $exe.DirectoryName
+          # Zip the entire publish folder (exe + dlls + native libs) into a single archive
+          $zipName = [System.IO.Path]::GetFileNameWithoutExtension($exe.Name) + '.zip'
+          $zipPath = Join-Path (Get-Location) $zipName
+          Compress-Archive -Path (Join-Path $dir '*') -DestinationPath $zipPath -Force
           "path=$($exe.FullName)" >> $env:GITHUB_OUTPUT
           "name=$($exe.Name)" >> $env:GITHUB_OUTPUT
+          "dir=$dir" >> $env:GITHUB_OUTPUT
+          "zip=$zipPath" >> $env:GITHUB_OUTPUT
+          "zipname=$zipName" >> $env:GITHUB_OUTPUT
 
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v2
@@ -56,12 +64,12 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ steps.locate.outputs.path }}
+          files: ${{ steps.locate.outputs.zip }}
           generate_release_notes: true
 
       - name: Upload artifact
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.locate.outputs.name }}
-          path: ${{ steps.locate.outputs.path }}
+          name: ${{ steps.locate.outputs.zipname }}
+          path: ${{ steps.locate.outputs.zip }}
