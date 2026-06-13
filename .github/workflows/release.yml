@@ -46,8 +46,8 @@ jobs:
           }
           $zipPath = Join-Path (Get-Location) 'FareverLogs.Uploader.zip'
           Compress-Archive -Path (Join-Path $dir.FullName '*') -DestinationPath $zipPath -Force
+          "dir=$($dir.FullName)" >> $env:GITHUB_OUTPUT
           "zip=$zipPath" >> $env:GITHUB_OUTPUT
-          "zipname=FareverLogs.Uploader.zip" >> $env:GITHUB_OUTPUT
 
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v2
@@ -65,5 +65,5 @@ jobs:
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.locate.outputs.zipname }}
-          path: ${{ steps.locate.outputs.zip }}
+          name: FareverLogs.Uploader
+          path: ${{ steps.locate.outputs.dir }}
